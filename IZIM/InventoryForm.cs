@@ -17,6 +17,17 @@ namespace IZIM
         }
         // This is needed for the item insert form
         public static string input;
+        private void RefreshInventory()
+        {
+            // populate inventory grid on change
+            using (IDbConnection cnn = new SQLiteConnection(SQLCommand.LoadConnectionString()))
+            {
+                inventoryGrid.DataSource = null;
+                string query = $"SELECT Name as Item, SUM(Quantity) Quantity, MAX(Date) 'Last Modified' FROM Logs INNER JOIN Items ON Barcode_ID = Barcode GROUP BY Name HAVING SUM(Quantity) > 0 AND [Location] = '{locationDropdown.Text}'";
+                inventoryGrid.DataSource = cnn.Query<Inventory>(query).ToList();
+                inventoryGrid.ClearSelection();
+            }
+        }
         // On form load, load locations for the dropdown
         private void InventoryForm_Load(object sender, EventArgs e)
         {
@@ -32,14 +43,7 @@ namespace IZIM
         private void locationDropdown_SelectedIndexChanged(object sender, EventArgs e)
         {
             locationTitleLbl.Text = locationDropdown.Text;
-            // populate inventory grid on change
-            using (IDbConnection cnn = new SQLiteConnection(SQLCommand.LoadConnectionString()))
-            {
-                inventoryGrid.DataSource = null;
-                string query = $"SELECT Name as Item, SUM(Quantity) Quantity, MAX(Date) 'Last Modified' FROM Logs INNER JOIN Items ON Barcode_ID = Barcode GROUP BY Name HAVING SUM(Quantity) > 0 AND [Location] = '{locationDropdown.Text}'";
-                inventoryGrid.DataSource = cnn.Query<Inventory>(query).ToList();
-                inventoryGrid.ClearSelection();
-            }
+            RefreshInventory();
         }
         // Insert a new item into items if needed, then add the barcode into inventory
         private void inventoryBtn_Click(object sender, EventArgs e)
@@ -92,6 +96,7 @@ namespace IZIM
                 SQLCommand.Execute(query);
                 MessageBox.Show($"{input} {action} of {locationTitleLbl.Text}."
                                 ,"Innovation Zone Inventory Management - Scan/Enter");
+                RefreshInventory();
             }
         }
     }

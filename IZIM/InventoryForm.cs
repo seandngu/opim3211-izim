@@ -23,7 +23,7 @@ namespace IZIM
             using (IDbConnection cnn = new SQLiteConnection(SQLCommand.LoadConnectionString()))
             {
                 inventoryGrid.DataSource = null;
-                string query = $"SELECT Name as Item, SUM(Quantity) Quantity, MAX(Date) 'Last Modified' FROM Logs INNER JOIN Items ON Barcode_ID = Barcode GROUP BY Name HAVING SUM(Quantity) > 0 AND [Location] = '{locationDropdown.Text}'";
+                string query = $"SELECT Name AS Item, SUM(CASE Quantity WHEN Action = 'Scanned In' THEN Quantity WHEN Action = 'Scanned Out' THEN -1*Quantity END) Quantity ,MAX(DATE) Last_Modified FROM Logs INNER JOIN Items ON Barcode_ID = Barcode GROUP BY Name HAVING SUM(Quantity) > 0 AND [Location] = '{locationDropdown.Text}'";
                 inventoryGrid.DataSource = cnn.Query<Inventory>(query).ToList();
                 inventoryGrid.ClearSelection();
             }
@@ -66,18 +66,6 @@ namespace IZIM
                 DialogResult actionChoice = MessageBox.Show("Scanning in or out?"
                                                      , "Innovation Zone Inventory Management - Scan/Enter"
                                                      , MessageBoxButtons.YesNoCancel);
-                if (actionChoice == DialogResult.Yes)
-                {
-                    action = "Scanned In";
-                }
-                else if (actionChoice == DialogResult.No)
-                {
-                    action = "Scanned Out";
-                }
-                else if (actionChoice == DialogResult.Cancel)
-                {
-                    return;
-                }
                 // add item to inventory if nonexisting
                 using (IDbConnection cnn = new SQLiteConnection(SQLCommand.LoadConnectionString()))
                 {
@@ -91,11 +79,22 @@ namespace IZIM
                         f.ShowDialog();
                     }
                 }
-                // finally, add/subtract item to the log
+                if (actionChoice == DialogResult.Yes)
+                {
+                    action = "Scanned In";
+                }
+                else if (actionChoice == DialogResult.No)
+                {
+                    action = "Scanned Out";
+                }
+                else if (actionChoice == DialogResult.Cancel)
+                {
+                    return;
+                }
                 query = $"INSERT INTO [Logs] ([Barcode], [Location], [Action], [Date]) VALUES ('{input}', '{locationTitleLbl.Text}', '{action}', DATE('now'))";
                 SQLCommand.Execute(query);
                 MessageBox.Show($"{input} {action} of {locationTitleLbl.Text}."
-                                ,"Innovation Zone Inventory Management - Scan/Enter");
+                , "Innovation Zone Inventory Management - Scan/Enter");
                 RefreshInventory();
             }
         }

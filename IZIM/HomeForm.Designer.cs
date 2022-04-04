@@ -57,6 +57,7 @@
             this.tmLbl.Size = new System.Drawing.Size(198, 13);
             this.tmLbl.TabIndex = 1;
             this.tmLbl.Text = "Developed by OPIM 3211 Team 4";
+            this.tmLbl.Click += new System.EventHandler(this.tmLbl_Click);
             // 
             // verLbl
             // 
@@ -88,6 +89,7 @@
             this.configBtn.TabIndex = 4;
             this.configBtn.Text = "Configuration";
             this.configBtn.UseVisualStyleBackColor = true;
+            this.configBtn.Click += new System.EventHandler(this.configBtn_Click);
             // 
             // exitBtn
             // 

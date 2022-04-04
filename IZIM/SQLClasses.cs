@@ -15,6 +15,7 @@ namespace IZIM
 
     public class Locations
     {
+        public string Building { get; set; }
         public string Location { get; set; }
     }
 

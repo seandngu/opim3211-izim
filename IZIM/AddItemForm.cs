@@ -34,7 +34,7 @@ namespace IZIM
             }
             else
             {
-                MessageBox.Show("bad");
+                MessageBox.Show("Submission cancelled.");
             }
         }
     }

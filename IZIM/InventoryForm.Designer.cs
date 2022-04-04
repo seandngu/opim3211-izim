@@ -35,6 +35,8 @@
             this.locationLbl = new System.Windows.Forms.Label();
             this.locationDropdown = new System.Windows.Forms.ComboBox();
             this.inventoryBtn = new System.Windows.Forms.Button();
+            this.buildingDropdown = new System.Windows.Forms.ComboBox();
+            this.buildingLbl = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.inventoryGrid)).BeginInit();
             this.SuspendLayout();
             // 
@@ -71,7 +73,7 @@
             // 
             this.locationLbl.AutoSize = true;
             this.locationLbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.locationLbl.Location = new System.Drawing.Point(552, 27);
+            this.locationLbl.Location = new System.Drawing.Point(580, 43);
             this.locationLbl.Name = "locationLbl";
             this.locationLbl.Size = new System.Drawing.Size(78, 20);
             this.locationLbl.TabIndex = 3;
@@ -81,7 +83,7 @@
             // 
             this.locationDropdown.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.locationDropdown.FormattingEnabled = true;
-            this.locationDropdown.Location = new System.Drawing.Point(636, 27);
+            this.locationDropdown.Location = new System.Drawing.Point(664, 43);
             this.locationDropdown.Name = "locationDropdown";
             this.locationDropdown.Size = new System.Drawing.Size(121, 21);
             this.locationDropdown.TabIndex = 4;
@@ -90,7 +92,7 @@
             // inventoryBtn
             // 
             this.inventoryBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.inventoryBtn.Location = new System.Drawing.Point(552, 55);
+            this.inventoryBtn.Location = new System.Drawing.Point(580, 71);
             this.inventoryBtn.Name = "inventoryBtn";
             this.inventoryBtn.Size = new System.Drawing.Size(208, 64);
             this.inventoryBtn.TabIndex = 5;
@@ -98,11 +100,33 @@
             this.inventoryBtn.UseVisualStyleBackColor = true;
             this.inventoryBtn.Click += new System.EventHandler(this.inventoryBtn_Click);
             // 
+            // buildingDropdown
+            // 
+            this.buildingDropdown.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.buildingDropdown.FormattingEnabled = true;
+            this.buildingDropdown.Location = new System.Drawing.Point(664, 16);
+            this.buildingDropdown.Name = "buildingDropdown";
+            this.buildingDropdown.Size = new System.Drawing.Size(121, 21);
+            this.buildingDropdown.TabIndex = 7;
+            this.buildingDropdown.SelectedIndexChanged += new System.EventHandler(this.buildingDropdown_SelectedIndexChanged);
+            // 
+            // buildingLbl
+            // 
+            this.buildingLbl.AutoSize = true;
+            this.buildingLbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.buildingLbl.Location = new System.Drawing.Point(585, 16);
+            this.buildingLbl.Name = "buildingLbl";
+            this.buildingLbl.Size = new System.Drawing.Size(69, 20);
+            this.buildingLbl.TabIndex = 6;
+            this.buildingLbl.Text = "Building:";
+            // 
             // InventoryForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.buildingDropdown);
+            this.Controls.Add(this.buildingLbl);
             this.Controls.Add(this.inventoryBtn);
             this.Controls.Add(this.locationDropdown);
             this.Controls.Add(this.locationLbl);
@@ -129,5 +153,7 @@
         private System.Windows.Forms.Label locationLbl;
         private System.Windows.Forms.ComboBox locationDropdown;
         private System.Windows.Forms.Button inventoryBtn;
+        private System.Windows.Forms.ComboBox buildingDropdown;
+        private System.Windows.Forms.Label buildingLbl;
     }
 }

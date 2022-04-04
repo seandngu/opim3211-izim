@@ -23,7 +23,7 @@ namespace IZIM
             using (IDbConnection cnn = new SQLiteConnection(SQLCommand.LoadConnectionString()))
             {
                 inventoryGrid.DataSource = null;
-                string query = $"SELECT Name AS Item, SUM(CASE Quantity WHEN Action = 'Scanned In' THEN Quantity WHEN Action = 'Scanned Out' THEN -1*Quantity END) Quantity ,MAX(DATE) Last_Modified FROM Logs INNER JOIN Items ON Barcode_ID = Barcode GROUP BY Name HAVING SUM(Quantity) > 0 AND [Location] = '{locationDropdown.Text}'";
+                string query = $"SELECT Name AS Item, SUM(CASE Quantity WHEN Action = 'Scanned In' THEN Quantity WHEN Action = 'Scanned Out' THEN -1*Quantity END) Quantity ,MAX(DATE) Last_Modified FROM Logs INNER JOIN Items ON Barcode_ID = Barcode WHERE [Location] = '{locationDropdown.Text}' AND [Building] = '{buildingDropdown.Text}' GROUP BY Name HAVING SUM(Quantity) > 0";
                 inventoryGrid.DataSource = cnn.Query<Inventory>(query).ToList();
                 inventoryGrid.ClearSelection();
             }
@@ -34,9 +34,9 @@ namespace IZIM
             // populate locations on load
             using (IDbConnection cnn = new SQLiteConnection(SQLCommand.LoadConnectionString()))
             {
-                string query = "SELECT * FROM [Locations] ORDER BY [Location]";
-                locationDropdown.DataSource = cnn.Query<Locations>(query).ToList();
-                locationDropdown.DisplayMember = "Location";
+                string query = "SELECT DISTINCT Building FROM [Locations] ORDER BY [Building]";
+                buildingDropdown.DataSource = cnn.Query<Locations>(query).ToList();
+                buildingDropdown.DisplayMember = "Building";
             }
         }
         // Change the title of the form when location is changed, query the database for the grid
@@ -57,6 +57,7 @@ namespace IZIM
             // do nothing if blank or default
             if (input == "00000000" || input == "")
             {
+                MessageBox.Show("Scan in cancelled.");
                 return;
             }
             // do the thing
@@ -91,11 +92,26 @@ namespace IZIM
                 {
                     return;
                 }
-                query = $"INSERT INTO [Logs] ([Barcode], [Location], [Action], [Date]) VALUES ('{input}', '{locationTitleLbl.Text}', '{action}', DATE('now'))";
+                query = $"INSERT INTO [Logs] ([Barcode], [Building], [Location], [Action], [Date]) VALUES ('{input}', '{buildingDropdown.Text}','{locationDropdown.Text}', '{action}', DATE('now'))";
                 SQLCommand.Execute(query);
-                MessageBox.Show($"{input} {action} of {locationTitleLbl.Text}."
-                , "Innovation Zone Inventory Management - Scan/Enter");
+                using (IDbConnection cnn = new SQLiteConnection(SQLCommand.LoadConnectionString()))
+                {
+                    query = $"SELECT * FROM [Items] WHERE Barcode_ID = '{input}'";
+                    List<Items> nameSource = cnn.Query<Items>(query).ToList();
+                    string name = nameSource[0].Name.ToString();
+                    MessageBox.Show($"{name} {action} of {locationTitleLbl.Text}.");
+                }
                 RefreshInventory();
+            }
+        }
+
+        private void buildingDropdown_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            using (IDbConnection cnn = new SQLiteConnection(SQLCommand.LoadConnectionString()))
+            {
+                string query = $"SELECT [Location] FROM [Locations] WHERE [Building] = '{buildingDropdown.Text}' ORDER BY [Location]";
+                locationDropdown.DataSource = cnn.Query<Locations>(query).ToList();
+                locationDropdown.DisplayMember = "Location";
             }
         }
     }

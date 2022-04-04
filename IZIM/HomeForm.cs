@@ -36,5 +36,17 @@ namespace IZIM
             InventoryForm f = new InventoryForm();
             f.Show();
         }
+
+        private void configBtn_Click(object sender, EventArgs e)
+        {
+            ConfigForm g = new ConfigForm();
+            g.Show();
+        }
+
+        private void tmLbl_Click(object sender, EventArgs e)
+        {
+            CreditsForm h = new CreditsForm();
+            h.Show();
+        }
     }
 }

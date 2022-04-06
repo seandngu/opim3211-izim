@@ -16,5 +16,10 @@ namespace IZIM
         {
             InitializeComponent();
         }
+
+        private void pictureBox1_Click(object sender, EventArgs e)
+        {
+            System.Diagnostics.Process.Start("https://random.dog/");
+        }
     }
 }

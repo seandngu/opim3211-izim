@@ -34,12 +34,12 @@
             this.quantityLabel = new System.Windows.Forms.Label();
             this.priceLabel = new System.Windows.Forms.Label();
             this.nameText = new System.Windows.Forms.TextBox();
-            this.categoryText = new System.Windows.Forms.TextBox();
             this.qtyText = new System.Windows.Forms.TextBox();
             this.priceText = new System.Windows.Forms.TextBox();
             this.submitBtn = new System.Windows.Forms.Button();
             this.barcodeLblLbl = new System.Windows.Forms.Label();
             this.barcodeLbl = new System.Windows.Forms.Label();
+            this.categoryDropdown = new System.Windows.Forms.ComboBox();
             this.SuspendLayout();
             // 
             // nameLabel
@@ -90,14 +90,6 @@
             this.nameText.Size = new System.Drawing.Size(182, 26);
             this.nameText.TabIndex = 4;
             // 
-            // categoryText
-            // 
-            this.categoryText.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.categoryText.Location = new System.Drawing.Point(111, 74);
-            this.categoryText.Name = "categoryText";
-            this.categoryText.Size = new System.Drawing.Size(182, 26);
-            this.categoryText.TabIndex = 5;
-            // 
             // qtyText
             // 
             this.qtyText.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -145,17 +137,26 @@
             this.barcodeLbl.TabIndex = 10;
             this.barcodeLbl.Text = "barcodeLbl";
             // 
+            // categoryDropdown
+            // 
+            this.categoryDropdown.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.categoryDropdown.FormattingEnabled = true;
+            this.categoryDropdown.Location = new System.Drawing.Point(111, 73);
+            this.categoryDropdown.Name = "categoryDropdown";
+            this.categoryDropdown.Size = new System.Drawing.Size(182, 28);
+            this.categoryDropdown.TabIndex = 11;
+            // 
             // AddItemForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(334, 211);
+            this.Controls.Add(this.categoryDropdown);
             this.Controls.Add(this.barcodeLbl);
             this.Controls.Add(this.barcodeLblLbl);
             this.Controls.Add(this.submitBtn);
             this.Controls.Add(this.priceText);
             this.Controls.Add(this.qtyText);
-            this.Controls.Add(this.categoryText);
             this.Controls.Add(this.nameText);
             this.Controls.Add(this.priceLabel);
             this.Controls.Add(this.quantityLabel);
@@ -163,6 +164,7 @@
             this.Controls.Add(this.nameLabel);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.MaximizeBox = false;
             this.Name = "AddItemForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Innovation Zone Inventory Management - Add Item";
@@ -179,11 +181,11 @@
         private System.Windows.Forms.Label quantityLabel;
         private System.Windows.Forms.Label priceLabel;
         private System.Windows.Forms.TextBox nameText;
-        private System.Windows.Forms.TextBox categoryText;
         private System.Windows.Forms.TextBox qtyText;
         private System.Windows.Forms.TextBox priceText;
         private System.Windows.Forms.Button submitBtn;
         private System.Windows.Forms.Label barcodeLblLbl;
         private System.Windows.Forms.Label barcodeLbl;
+        private System.Windows.Forms.ComboBox categoryDropdown;
     }
 }

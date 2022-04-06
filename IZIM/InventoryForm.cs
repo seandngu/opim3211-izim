@@ -23,7 +23,7 @@ namespace IZIM
             using (IDbConnection cnn = new SQLiteConnection(SQLCommand.LoadConnectionString()))
             {
                 inventoryGrid.DataSource = null;
-                string query = $"SELECT Name AS Item, SUM(CASE Quantity WHEN Action = 'Scanned In' THEN Quantity WHEN Action = 'Scanned Out' THEN -1*Quantity END) Quantity ,MAX(DATE) Last_Modified FROM Logs INNER JOIN Items ON Barcode_ID = Barcode WHERE [Location] = '{locationDropdown.Text}' AND [Building] = '{buildingDropdown.Text}' GROUP BY Name HAVING SUM(Quantity) > 0";
+                string query = $"SELECT Name AS Item, SUM(CASE WHEN Action = 'Scanned In' THEN Quantity ELSE -1 * QtyActl END) Quantity, MAX(DATE) Last_Modified FROM Logs JOIN Items ON Barcode_ID = Barcode WHERE [Location] = '{locationDropdown.Text}' AND [Building] = '{buildingDropdown.Text}' GROUP BY Name";
                 inventoryGrid.DataSource = cnn.Query<Inventory>(query).ToList();
                 inventoryGrid.ClearSelection();
             }
@@ -50,6 +50,7 @@ namespace IZIM
         {
             string query = "";
             string action = "";
+            string scanout = "0";
             // scan in / type barcode
             input = Interaction.InputBox("Scan/Enter a barcode."
                                         ,"Innovation Zone Inventory Management - Scan/Enter"
@@ -76,8 +77,8 @@ namespace IZIM
                     if (items.Count == 0)
                     {
                         // new item prompt
-                        AddItemForm f = new AddItemForm();
-                        f.ShowDialog();
+                        AddItemForm z = new AddItemForm();
+                        z.ShowDialog();
                     }
                 }
                 if (actionChoice == DialogResult.Yes)
@@ -87,12 +88,15 @@ namespace IZIM
                 else if (actionChoice == DialogResult.No)
                 {
                     action = "Scanned Out";
+                    scanout = Interaction.InputBox("How much are you scanning out?"
+                                        , "Innovation Zone Inventory Management - Scan/Enter"
+                                        , "1");
                 }
                 else if (actionChoice == DialogResult.Cancel)
                 {
                     return;
                 }
-                query = $"INSERT INTO [Logs] ([Barcode], [Building], [Location], [Action], [Date]) VALUES ('{input}', '{buildingDropdown.Text}','{locationDropdown.Text}', '{action}', DATE('now'))";
+                query = $"INSERT INTO [Logs] ([Barcode], [Building], [Location], [Action], [Date], [QtyActl]) VALUES ('{input}', '{buildingDropdown.Text}','{locationDropdown.Text}', '{action}', DATE('now'), {scanout})";
                 SQLCommand.Execute(query);
                 using (IDbConnection cnn = new SQLiteConnection(SQLCommand.LoadConnectionString()))
                 {
